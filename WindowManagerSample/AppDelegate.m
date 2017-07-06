@@ -7,7 +7,8 @@
 //
 
 #import "AppDelegate.h"
-
+#import "SViewController.h"
+#import "SFUIWindowManager.h"
 @interface AppDelegate ()
 
 @end
@@ -16,6 +17,21 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    self.window = [[UIWindow alloc]initWithFrame:UIScreen.mainScreen.bounds];
+    self.window.rootViewController = [[SViewController alloc] initWithWindowName:@"main" andViewName:@"View-1"];
+    
+    
+    [self.window makeKeyAndVisible];
+    
+    //initialize main window
+    [[SFUIWindowManager sharedInstance] setMainApplicationWindow:self.window];
+    
+    // initialize our uber view - window
+     SViewController *foregroundController = [[SViewController alloc] initWithWindowName:@"foreground" andViewName:@"View-1"];
+    [[SFUIWindowManager sharedInstance].foregroundWindow pushViewController:foregroundController animated:NO completion:^{
+        
+    }];
+    
     // Override point for customization after application launch.
     return YES;
 }
