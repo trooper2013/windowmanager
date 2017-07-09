@@ -13,6 +13,8 @@
 @interface SFUIWindowManager : NSObject
 
 @property(readonly,strong) SFUIWindowContainer *foregroundWindow;
+@property(nonatomic,weak)  SFUIWindowContainer *snapshotWindow;
+@property(nonatomic,strong) UIViewController *snapshotViewController;
 
 - (SFUIWindowContainer *)mainApplicationWindow;
 - (void)setMainApplicationWindow:(UIWindow *) window;
@@ -22,6 +24,9 @@
 - (SFUIWindowContainer *)windowWithName:(NSString *) name;
 
 - (NSDictionary<NSString *,SFUIWindowContainer *> *)namedWindows;
+
+
+
 + (instancetype)sharedInstance;
 
 @end

@@ -9,7 +9,10 @@
 #import "AppDelegate.h"
 #import "SViewController.h"
 #import "SFUIWindowManager.h"
-@interface AppDelegate ()
+#import "SnapshotViewController.h"
+@interface AppDelegate () {
+    SnapshotViewController *snapshotViewController;
+}
 
 @end
 
@@ -31,6 +34,9 @@
     [[SFUIWindowManager sharedInstance].foregroundWindow pushViewController:foregroundController animated:NO completion:^{
         
     }];
+    
+    //set custom SnapshotView
+    [SFUIWindowManager sharedInstance].snapshotViewController = [[SnapshotViewController alloc] init];
     
     // Override point for customization after application launch.
     return YES;
@@ -62,6 +68,4 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-
-
 @end

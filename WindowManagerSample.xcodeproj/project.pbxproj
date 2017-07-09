@@ -17,6 +17,8 @@
 		B765E4F41F0E906400C51283 /* STableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B765E4F21F0E906400C51283 /* STableViewCell.xib */; };
 		B765E4FA1F0E98D300C51283 /* SFUIWindowManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B765E4F71F0E98D300C51283 /* SFUIWindowManager.m */; };
 		B765E4FB1F0E98D300C51283 /* SFUIWindowContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = B765E4F91F0E98D300C51283 /* SFUIWindowContainer.m */; };
+		B765E58A1F11ED9F00C51283 /* SnapshotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B765E5881F11ED9F00C51283 /* SnapshotViewController.m */; };
+		B765E58B1F11ED9F00C51283 /* SnapshotViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B765E5891F11ED9F00C51283 /* SnapshotViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +39,9 @@
 		B765E4F71F0E98D300C51283 /* SFUIWindowManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFUIWindowManager.m; sourceTree = "<group>"; };
 		B765E4F81F0E98D300C51283 /* SFUIWindowContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFUIWindowContainer.h; sourceTree = "<group>"; };
 		B765E4F91F0E98D300C51283 /* SFUIWindowContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFUIWindowContainer.m; sourceTree = "<group>"; };
+		B765E5871F11ED9F00C51283 /* SnapshotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnapshotViewController.h; sourceTree = "<group>"; };
+		B765E5881F11ED9F00C51283 /* SnapshotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnapshotViewController.m; sourceTree = "<group>"; };
+		B765E5891F11ED9F00C51283 /* SnapshotViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SnapshotViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +75,9 @@
 		B765E4C11F0DBB1F00C51283 /* WindowManagerSample */ = {
 			isa = PBXGroup;
 			children = (
+				B765E5871F11ED9F00C51283 /* SnapshotViewController.h */,
+				B765E5881F11ED9F00C51283 /* SnapshotViewController.m */,
+				B765E5891F11ED9F00C51283 /* SnapshotViewController.xib */,
 				B765E4F01F0E906400C51283 /* STableViewCell.h */,
 				B765E4F11F0E906400C51283 /* STableViewCell.m */,
 				B765E4F21F0E906400C51283 /* STableViewCell.xib */,
@@ -164,6 +172,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B765E58B1F11ED9F00C51283 /* SnapshotViewController.xib in Resources */,
 				B765E4D21F0DBB1F00C51283 /* LaunchScreen.storyboard in Resources */,
 				B765E4CF1F0DBB1F00C51283 /* Assets.xcassets in Resources */,
 				B765E4E21F0DBE0400C51283 /* SViewController.xib in Resources */,
@@ -184,6 +193,7 @@
 				B765E4FB1F0E98D300C51283 /* SFUIWindowContainer.m in Sources */,
 				B765E4C71F0DBB1F00C51283 /* AppDelegate.m in Sources */,
 				B765E4C41F0DBB1F00C51283 /* main.m in Sources */,
+				B765E58A1F11ED9F00C51283 /* SnapshotViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,6 +344,7 @@
 				B765E4D81F0DBB1F00C51283 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
