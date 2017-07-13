@@ -29,11 +29,15 @@
     //initialize main window
     [[SFUIWindowManager sharedInstance] setMainApplicationWindow:self.window];
     
-    // initialize our uber view - window
-     SViewController *foregroundController = [[SViewController alloc] initWithWindowName:@"foreground" andViewName:@"View-1"];
-    [[SFUIWindowManager sharedInstance].foregroundWindow pushViewController:foregroundController animated:NO completion:^{
-        
-    }];
+    // initialize our auth view - window
+     SViewController *authController = [[SViewController alloc] initWithWindowName:@"auth" andViewName:@"View-1"];
+    
+    
+    SViewController *passcodeController = [[SViewController alloc] initWithWindowName:@"passcode" andViewName:@"View-1"];
+    
+    [[SFUIWindowManager sharedInstance].authWindow pushViewController:authController];
+    
+    [[SFUIWindowManager sharedInstance].passcodeWindow pushViewController:passcodeController];
     
     //set custom SnapshotView
     [SFUIWindowManager sharedInstance].snapshotViewController = [[SnapshotViewController alloc] init];

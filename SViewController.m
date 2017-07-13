@@ -123,8 +123,8 @@
 }
 
 -(void) bringToForeground:(NSString *) name {
-     NSLog(@"bringToForeground  Called: %@",name );
-    [[[SFUIWindowManager sharedInstance] windowWithName:name] bringToFront];
+    NSLog(@"bringToForeground  Called: %@",name );
+    [[SFUIWindowManager sharedInstance] bringToFront:name];
 }
 
 +(NSString *) getNextName :(NSString *) name {

@@ -25,10 +25,13 @@
 @interface SFUIWindowContainer : NSObject<SFRootViewManager>
 
 - (void)bringToFront;
+
 - (void)sendToBack;
 
 - (instancetype)initWithWindow:(UIWindow *) window;
 
-@property(nonatomic, strong)UIWindow *window;
+@property (nonatomic, strong) UIWindow *window;
+
+@property (nonatomic) UIWindowLevel windowLevel;
 
 @end

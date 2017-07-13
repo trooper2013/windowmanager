@@ -14,6 +14,7 @@
 }
 
 @synthesize window = _window;
+@synthesize windowLevel = _windowLevel;
 
 - (instancetype)initWithWindow:(UIWindow *)window {
     
@@ -32,6 +33,13 @@
     return self;
 }
 
+- (void) setWindowLevel:(UIWindowLevel)windowLevel {
+    if (windowLevel !=_windowLevel){
+        _windowLevel = windowLevel;
+        self.window.windowLevel = _windowLevel;
+    }
+}
+
 - (void)pushViewController:(UIViewController *)controller {
     [self pushViewController:controller animated:NO completion:nil];
 }
@@ -44,6 +52,13 @@
 
     if (!viewController)
         return;
+    
+    if (!self.window.rootViewController) {
+        self.window.rootViewController = viewController;
+        if (completion)
+            completion();
+        return;
+    }
 
     UIViewController *currentViewController = self.window.rootViewController;
     while (currentViewController.presentedViewController != nil
@@ -62,7 +77,8 @@
     }
     else {
         self.window.rootViewController = viewController;
-        completion();
+        if (completion)
+            completion();
     }
 
 }
@@ -84,13 +100,14 @@
         }
     } else {
         self.window.rootViewController = nil;
-        completion();
+        if (completion)
+            completion();
     }
 
 }
 
 - (void)bringToFront {
-    self.window.windowLevel = UIWindowLevelAlert  + 1;
+    [self.window setWindowLevel:_windowLevel];
     [self.window makeKeyAndVisible];
 }
 
@@ -130,7 +147,8 @@
         if ([strongSelf alertWasPresent]) {
             [strongSelf restoreAlert:presentingViewController];
         }
-        completion();
+        if (completion)
+            completion();
     }];
 }
 
