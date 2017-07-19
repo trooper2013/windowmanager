@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import "SViewController.h"
-#import "SFUIWindowManager.h"
+#import "SFSDKWindowManager.h"
 #import "SnapshotViewController.h"
 @interface AppDelegate () {
     SnapshotViewController *snapshotViewController;
@@ -27,7 +27,7 @@
     [self.window makeKeyAndVisible];
     
     //initialize main window
-    [[SFUIWindowManager sharedInstance] setMainApplicationWindow:self.window];
+    [[SFSDKWindowManager sharedManager] setMainApplicationWindow:self.window];
     
     // initialize our auth view - window
      SViewController *authController = [[SViewController alloc] initWithWindowName:@"auth" andViewName:@"View-1"];
@@ -35,12 +35,12 @@
     
     SViewController *passcodeController = [[SViewController alloc] initWithWindowName:@"passcode" andViewName:@"View-1"];
     
-    [[SFUIWindowManager sharedInstance].authWindow pushViewController:authController];
+    [[SFSDKWindowManager sharedManager].authWindow pushViewController:authController];
     
-    [[SFUIWindowManager sharedInstance].passcodeWindow pushViewController:passcodeController];
+    [[SFSDKWindowManager sharedManager].passcodeWindow pushViewController:passcodeController];
     
     //set custom SnapshotView
-    [SFUIWindowManager sharedInstance].snapshotViewController = [[SnapshotViewController alloc] init];
+    [SFSDKWindowManager sharedManager].snapshotViewController = [[SnapshotViewController alloc] init];
     
     // Override point for customization after application launch.
     return YES;
