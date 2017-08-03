@@ -19,16 +19,23 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Snapshot View" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nL1-tM-11N">
-                    <rect key="frame" x="106" y="262" width="155" height="84"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Snapshot View" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nL1-tM-11N">
+                    <rect key="frame" x="108.5" y="245" width="158" height="84"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="158" id="1qY-AD-JoN"/>
+                        <constraint firstAttribute="height" constant="84" id="zaf-1k-srT"/>
+                    </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="23"/>
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-            <point key="canvasLocation" x="34.5" y="82.5"/>
+            <color key="backgroundColor" red="0.069329753539999997" green="0.67433894230000002" blue="0.66805028050000004" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstItem="nL1-tM-11N" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="245" id="pZh-tf-kQM"/>
+                <constraint firstItem="nL1-tM-11N" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="w1a-QB-Ys1"/>
+            </constraints>
+            <point key="canvasLocation" x="34" y="82"/>
         </view>
     </objects>
 </document>

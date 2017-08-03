@@ -19,6 +19,7 @@
 		B765E4FB1F0E98D300C51283 /* SFSDKWindowContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = B765E4F91F0E98D300C51283 /* SFSDKWindowContainer.m */; };
 		B765E58A1F11ED9F00C51283 /* SnapshotViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B765E5881F11ED9F00C51283 /* SnapshotViewController.m */; };
 		B765E58B1F11ED9F00C51283 /* SnapshotViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B765E5891F11ED9F00C51283 /* SnapshotViewController.xib */; };
+		B7A2126E1F33748200D1E4B0 /* SFSDKRootController.m in Sources */ = {isa = PBXBuildFile; fileRef = B7A2126D1F33748200D1E4B0 /* SFSDKRootController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,8 @@
 		B765E5871F11ED9F00C51283 /* SnapshotViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SnapshotViewController.h; sourceTree = "<group>"; };
 		B765E5881F11ED9F00C51283 /* SnapshotViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SnapshotViewController.m; sourceTree = "<group>"; };
 		B765E5891F11ED9F00C51283 /* SnapshotViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SnapshotViewController.xib; sourceTree = "<group>"; };
+		B7A2126C1F33748200D1E4B0 /* SFSDKRootController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFSDKRootController.h; sourceTree = "<group>"; };
+		B7A2126D1F33748200D1E4B0 /* SFSDKRootController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFSDKRootController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +108,8 @@
 		B765E4F51F0E98A600C51283 /* WindowManager */ = {
 			isa = PBXGroup;
 			children = (
+				B7A2126C1F33748200D1E4B0 /* SFSDKRootController.h */,
+				B7A2126D1F33748200D1E4B0 /* SFSDKRootController.m */,
 				B765E4F61F0E98D300C51283 /* SFSDKWindowManager.h */,
 				B765E4F71F0E98D300C51283 /* SFSDKWindowManager.m */,
 				B765E4F81F0E98D300C51283 /* SFSDKWindowContainer.h */,
@@ -192,6 +197,7 @@
 				B765E4FA1F0E98D300C51283 /* SFSDKWindowManager.m in Sources */,
 				B765E4FB1F0E98D300C51283 /* SFSDKWindowContainer.m in Sources */,
 				B765E4C71F0DBB1F00C51283 /* AppDelegate.m in Sources */,
+				B7A2126E1F33748200D1E4B0 /* SFSDKRootController.m in Sources */,
 				B765E4C41F0DBB1F00C51283 /* main.m in Sources */,
 				B765E58A1F11ED9F00C51283 /* SnapshotViewController.m in Sources */,
 			);
