@@ -115,6 +115,16 @@
         cell.cellDelegate = self;
     }
     cell.windowName.text = [_windowList objectAtIndex:indexPath.row];
+    if ( [cell.windowName.text isEqualToString:@"auth"] || [cell.windowName.text isEqualToString:@"passcode"]) {
+        cell.removeButton.enabled = NO;
+    } else  if ([cell.windowName.text isEqualToString:@"snapshot"]) {
+         cell.foregroundButton.enabled = NO;
+         cell.removeButton.enabled = NO;
+    } else {
+         cell.removeButton.enabled = YES;
+         cell.foregroundButton.enabled = YES;
+    }
+                
     return cell;
 }
 
@@ -123,10 +133,7 @@
 }
 
 - (void)reloadData {
-    if (!_windowList) {
-        _windowList = [NSMutableArray new];
-    }
-    
+    _windowList = [NSMutableArray new];
    [[[SFSDKWindowManager sharedManager].namedWindows.keyEnumerator allObjects] enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
       [_windowList addObject:obj];
    }];

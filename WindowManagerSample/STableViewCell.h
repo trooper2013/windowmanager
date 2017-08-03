@@ -17,6 +17,8 @@
 @interface STableViewCell : UITableViewCell
 
 @property (weak,nonatomic) id<STableViewDelegate> cellDelegate;
+@property (weak, nonatomic) IBOutlet UIButton *removeButton;
+@property (weak, nonatomic) IBOutlet UIButton *foregroundButton;
 @property (weak, nonatomic) IBOutlet UILabel *windowName;
 - (IBAction)removeWindowAction:(id)sender;
 - (IBAction)bringToForegroundAction:(id)sender;

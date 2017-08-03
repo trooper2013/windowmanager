@@ -44,9 +44,11 @@
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="foregroundButton" destination="9yA-Lg-2GC" id="BRB-ud-Deu"/>
+                <outlet property="removeButton" destination="ZXO-Cb-QZC" id="qKQ-qd-zFL"/>
                 <outlet property="windowName" destination="Kvi-IU-oGT" id="grV-lr-tst"/>
             </connections>
-            <point key="canvasLocation" x="-5" y="-96"/>
+            <point key="canvasLocation" x="-256" y="-101"/>
         </tableViewCell>
     </objects>
 </document>
