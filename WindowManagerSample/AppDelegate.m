@@ -22,53 +22,33 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     hasRenderedSnapshot = NO;
-    self.window = [[UIWindow alloc]initWithFrame:UIScreen.mainScreen.bounds];
-    self.window.rootViewController = [[SViewController alloc] initWithWindowName:@"main" andViewName:@"View-1"];
-    [[SFSDKWindowManager sharedManager] setMainUIWindow:self.window];
-    
-//    [self.window makeKeyAndVisible];
-    
-    //initialize main window
-    
-//    
-//    // initialize our auth view - window
-//     SViewController *authController = [[SViewController alloc] initWithWindowName:@"auth" andViewName:@"View-1"];
-//
-//    SViewController *passcodeController = [[SViewController alloc] initWithWindowName:@"passcode" andViewName:@"View-1"];
-    
-    _snapshotViewController = [[SnapshotViewController alloc] init];
-//
-//    [[SFSDKWindowManager sharedManager].mainWindow pushViewController:self.window.rootViewController];
-   // [[SFSDKWindowManager sharedManager].authWindow pushViewController:authController];
-    //[[SFSDKWindowManager sharedManager].passcodeWindow pushViewController:passcodeController];
-    SFSDKWindowContainer *authWindow = [SFSDKWindowManager sharedManager].authWindow;
-    SFSDKWindowContainer *passcodeWindow = [SFSDKWindowManager sharedManager].passcodeWindow;
-    [[SFSDKWindowManager sharedManager] bringToFront:SFSDKWindowManager.sharedManager.mainWindow];
-   // [self.window makeKeyAndVisible];
-//
-////    [[SFSDKWindowManager sharedManager] pushViewController:authController window:SFSDKWindowManager.sharedManager.authWindow withCompletion:^{
-////        [[SFSDKWindowManager sharedManager] pushViewController:passcodeController window:SFSDKWindowManager.sharedManager.passcodeWindow withCompletion:^{
-////            [[SFSDKWindowManager sharedManager] bringToFront:SFSDKWindowManager.sharedManager.mainWindow];
-////        }];
-////    }];
-//    
-//    
-//    //set custom SnapshotView
-    
-    
-   
-    
+    [self setupAllWindows];
+    [[SFSDKWindowManager sharedManager].mainWindow.window makeKeyAndVisible];
     // Override point for customization after application launch.
     return YES;
+}
+
+- (void) setupAllWindows {
+    self.window = [[UIWindow alloc]initWithFrame:UIScreen.mainScreen.bounds];
+    _snapshotViewController = [[SnapshotViewController alloc] init];
+    [[SFSDKWindowManager sharedManager] mainWindow].viewController = [[SViewController alloc] initWithWindowName:@"main" andViewName:@"View-1"];
+    SViewController *authController = [[SViewController alloc] initWithWindowName:@"auth" andViewName:@"View-1"];
+    SViewController *passcodeController = [[SViewController alloc] initWithWindowName:@"passcode" andViewName:@"View-1"];
+    [SFSDKWindowManager sharedManager].snapshotWindow.viewController = _snapshotViewController;
+    [SFSDKWindowManager sharedManager].passcodeWindow.viewController = passcodeController;
+    [SFSDKWindowManager sharedManager].authWindow.viewController = authController;
+    
 }
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
-    [[SFSDKWindowManager sharedManager] pushViewController:_snapshotViewController window:SFSDKWindowManager.sharedManager.snapshotWindow withCompletion:^{
-         self->hasRenderedSnapshot = YES;
-    }];
+    self->hasRenderedSnapshot = YES;
+    [[SFSDKWindowManager sharedManager] swapWindow:[SFSDKWindowManager sharedManager].lastActiveWindow withWindow:[SFSDKWindowManager sharedManager].snapshotWindow];
+//    [[SFSDKWindowManager sharedManager] pushViewController:_snapshotViewController window:SFSDKWindowManager.sharedManager.snapshotWindow withCompletion:^{
+//         self->hasRenderedSnapshot = YES;
+//    }];
 }
 
 
@@ -86,10 +66,13 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     if ( self->hasRenderedSnapshot ) {
-        [[SFSDKWindowManager sharedManager] popViewController:_snapshotViewController window:SFSDKWindowManager.sharedManager.snapshotWindow withCompletion:^{
-            self->hasRenderedSnapshot  = NO;
-            [SFSDKWindowManager.sharedManager restorePreviousActiveWindow];
-        }];
+          self->hasRenderedSnapshot = NO;
+          [[SFSDKWindowManager sharedManager] swapWindow:[SFSDKWindowManager sharedManager].snapshotWindow withWindow:[SFSDKWindowManager sharedManager].lastActiveWindow];
+        
+//        [[SFSDKWindowManager sharedManager] popViewController:_snapshotViewController window:SFSDKWindowManager.sharedManager.snapshotWindow withCompletion:^{
+//            self->hasRenderedSnapshot  = NO;
+//            [SFSDKWindowManager.sharedManager restorePreviousActiveWindow];
+//        }];
     }
 }
 

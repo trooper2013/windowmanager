@@ -9,9 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface SViewController : UIViewController
-@property (weak, nonatomic) IBOutlet UIStepper *zoomControl;
-- (IBAction)zoomAction:(id)sender;
-
 - (instancetype)initWithWindowName:(NSString *) windowName andViewName:(NSString *) viewName;
-
 @end

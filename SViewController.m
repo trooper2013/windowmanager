@@ -45,18 +45,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self reloadData];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.nameOfCurrentWindow.text = _windowName;
     self.cnameOfCurrentView.text = _viewName;
-    self.textView.delegate = self;
-    // Do any additional setup after loading the view from its nib.
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     
 }
+
 - (void)viewDidAppear:(BOOL)animated {
      [self reloadData];
 }
@@ -70,45 +68,54 @@
      [self reloadData];
 }
 
+-(UIViewController *)topViewController:(UIViewController *) controller
+{
+    UIViewController *topViewController = controller;
+    while (topViewController.presentedViewController != nil
+           && !topViewController.presentedViewController.isBeingDismissed) {
+        //stop if we find that an alert has been presented
+        if ([topViewController.presentedViewController isKindOfClass:[UIAlertController class]]) {
+            break;
+        }
+        topViewController = topViewController.presentedViewController;
+    }
+    return topViewController;
+}
+
+
 - (IBAction)pushView:(id)sender {
     NSString *nextViewName = [SViewController getNextName:_viewName];
     SFSDKWindowContainer * window=[[SFSDKWindowManager sharedManager] windowWithName:_windowName];
     SViewController *nextController = [[SViewController alloc] initWithWindowName:_windowName andViewName:nextViewName];
-    [window pushViewController:nextController animated:NO completion:^{
-        
-    }];
+    
+    UIViewController *topViewController = [self topViewController:window.viewController];
+    [topViewController presentViewController:nextController animated:NO completion:nil];
 }
 
 - (IBAction)popView:(id)sender {
     //add protection to avoid removing a rootView
     if (![SViewController isRootView:_viewName]) {
         SFSDKWindowContainer * window= [[SFSDKWindowManager sharedManager] windowWithName:_windowName];
-        [window popViewController:self animated:NO completion:^{
-            
-        }];
+         UIViewController *topViewController = [self topViewController:window.viewController];
+         [topViewController dismissViewControllerAnimated:YES completion:nil];
+        
     }
 }
 
 - (IBAction)newWindow:(id)sender {
     
     NSString *nextWindowName = [SViewController getNextWindowName:_windowName];
+    SFSDKWindowContainer *currentWindow = [[SFSDKWindowManager sharedManager] windowWithName:_windowName];
     SFSDKWindowContainer *newWindow = [[SFSDKWindowManager sharedManager] createNewNamedWindow:nextWindowName];
     [self reloadData];
-    [[SFSDKWindowManager sharedManager] bringToFront:newWindow];
-    
     SViewController *nextController = [[SViewController alloc] initWithWindowName:nextWindowName andViewName:@"View-1"];
-    [newWindow pushViewController:nextController animated:NO completion:^{
-        
-    }];
-    
+    newWindow.viewController = nextController;
+    [[SFSDKWindowManager sharedManager] swapWindow:currentWindow withWindow:newWindow];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    
     static NSString *simpleTableIdentifier = @"MyTableCell";
     STableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-    
     if (cell == nil) {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"STableViewCell" owner:self options:nil];
         cell = [nib objectAtIndex:0];
@@ -129,7 +136,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [[SFSDKWindowManager sharedManager].namedWindows count];
+    return [_windowList count];
 }
 
 - (void)reloadData {
@@ -149,13 +156,9 @@
 - (void)bringToForeground:(NSString *) name {
     NSLog(@"bringToForeground  Called: %@",name );
     SFSDKWindowContainer *window = [[SFSDKWindowManager sharedManager] windowWithName:name];
-    [[SFSDKWindowManager sharedManager] bringToFront:window];
-    if ([name isEqualToString:@"auth"] || [name isEqualToString:@"passcode"] ) {
-        if (![[window.window.rootViewController presentedViewController] isKindOfClass:[self class]]) {
-            SViewController *controller = [[SViewController alloc] initWithWindowName:name andViewName:@"View-1"];
-            [window pushViewController:controller];
-        }
-    }
+    SFSDKWindowContainer *currentWindow = [[SFSDKWindowManager sharedManager] windowWithName:_windowName];
+    [[SFSDKWindowManager sharedManager] swapWindow:currentWindow withWindow:window];
+    
 }
 
 - (void)textViewDidBeginEditing:(UITextView *)textView {

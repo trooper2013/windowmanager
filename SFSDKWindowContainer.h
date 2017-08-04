@@ -36,52 +36,6 @@ typedef NS_ENUM(NSInteger, SFSDKWindowType) {
     SFSDKWindowTypeSnapshot,
     SFSDKWindowTypeOther
 };
-@class SFSDKWindowContainer;
-
-@protocol SFSDKWindowContainerDelegate<NSObject>
-
-@optional
-
-/**
- Called when the window is going to be made key & visible
- @param window The window that is going to be made key & visible
- */
-- (void)windowWillMakeKeyVisible:(SFSDKWindowContainer *_Nonnull)window;
-
-/**
- Called when the window was made key & visible
- @param window The window that was made key & visible
- */
-- (void)windowDidMakeKeyVisible:(SFSDKWindowContainer *_Nonnull)window;
-
-/**
- Called when the controller will be pushed
- @param window The window that will be used
- @param controller The controller that will be presented by the window
- */
-- (void)windowWillPushViewController:(SFSDKWindowContainer *_Nonnull)window controller:(UIViewController *_Nullable)controller;
-
-/**
- Called when the controller was pushed
- @param window The window that will be used
- @param controller The controller that was presented by the window
- */
-- (void)windowDidPushViewController:(SFSDKWindowContainer *_Nonnull)window controller:(UIViewController *_Nonnull)controller;
-
-/**
- Called prior to the controller being dimissed
- @param window The window that will be used
- @param controller The controller that will be dismissed from the window
- */
-- (void)windowWillPopViewController:(SFSDKWindowContainer *_Nonnull)window controller:(UIViewController *_Nullable)controller;
-
-/**
- Called after the controller was dimissed
- @param window The window that will be used
- @param controller The controller that was dismissed from the window
- */
-- (void)windowDidPopViewController:(SFSDKWindowContainer *_Nonnull)window controller:(UIViewController *_Nullable)controller;
-@end
 
 @interface SFSDKWindowContainer : NSObject
 /** Underlying Window that is wrapped by this container
@@ -100,57 +54,26 @@ typedef NS_ENUM(NSInteger, SFSDKWindowType) {
  */
 @property (nonatomic, copy, readonly) NSString * _Nonnull windowName;
 
+/** UIViewController viewController
+ */
+@property (nonatomic, strong) UIViewController * _Nullable viewController;
+
 /**
  Create an instance of a Window
  @param window An instance of UIWindow
  @param windowName key for the UIWindow
  @return SFSDKWindowComtainer
  */
-- (instancetype _Nonnull )initWithWindow:(UIWindow *_Nonnull) window andName:(NSString *_Nonnull) windowName;
-
-/** Add a Window Container delegate
- * @param delegate to add
+- (instancetype _Nonnull )initWithWindow:(UIWindow *_Nonnull)window name:(NSString *_Nonnull) windowName level:(UIWindowLevel)level;
+/**
+ * Make window visible
  */
-- (void)addDelegate:(id<SFSDKWindowContainerDelegate>_Nonnull)delegate;
-
-/** Remove a Window Container delegate
- * @param delegate to remove
- */
-- (void)removeDelegate:(id<SFSDKWindowContainerDelegate>_Nonnull)delegate;
-
-/** Push(present) a View Controller
- * @param controller to push
- */
-- (void)pushViewController:(UIViewController *_Nonnull)controller;
-
-/** Pop(dismiss) a View Controller
- * @param controller to pop
- */
-- (void)popViewController:(UIViewController *_Nullable)controller;
-
-/** Push(present) a View Controller and invoke completion block when done
- @param controller to push
- @param animated animate or not
- @param completion to invoke when done
- */
-- (void)pushViewController:(UIViewController *_Nonnull)controller animated:(BOOL)animated completion:(void (^_Nullable)(void))completion;
-
-/** Pop(dismiss) a View Controller and invoke completion block when done
- * @param controller to pop
- * @param animated animate or not
- * @param completion to invoke when done
- */
-- (void)popViewController:(UIViewController *_Nullable)controller animated:(BOOL)animated completion:(void (^_Nullable)(void))completion;
+- (void)enable;
 
 /**
- * Bring this window to the front (set its Z-Order value) and make key visible
+ * Make window invisible
  */
-- (void)makeKeyVisible;
-
-/**
- * Bring this window to the front (unset its Z-Order value)
- */
-- (void)sendToBack;
+- (void)disable;
 
 /** Convenience API returns true if the SFSDKWindowType is main
  * @return YES if this is the main Window
