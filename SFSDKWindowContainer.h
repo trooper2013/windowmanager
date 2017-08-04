@@ -46,13 +46,14 @@ typedef NS_ENUM(NSInteger, SFSDKWindowType) {
  Called when the window is going to be made key & visible
  @param window The window that is going to be made key & visible
  */
-- (void)windowEnable:(SFSDKWindowContainer *_Nonnull)window;
+- (void)windowEnable:(SFSDKWindowContainer *_Nonnull)window animated:(BOOL)animated withCompletion:(void (^)(void))completion;
 
 /**
  Called when the window was made key & visible
  @param window The window that was made key & visible
  */
-- (void)windowDisable:(SFSDKWindowContainer *_Nonnull)window;
+- (void)windowDisable:(SFSDKWindowContainer *_Nonnull)window animated:(BOOL)animated withCompletion:(void (^)(void))completion;
+
 
 @end
 
@@ -91,6 +92,19 @@ typedef NS_ENUM(NSInteger, SFSDKWindowType) {
  * Make window visible
  */
 - (void)enable;
+
+- (BOOL)isEnabled;
+
+/**
+ * Make window visible
+ */
+- (void)enable:(BOOL)animated withCompletion:(void (^)(void))completion;
+
+
+/**
+ * Make window visible
+ */
+- (void)disable:(BOOL)animated withCompletion:(void (^)(void))completion;
 
 /**
  * Make window invisible

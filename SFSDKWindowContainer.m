@@ -50,7 +50,7 @@
 - (UIWindow *)window {
     if (_window == nil) {
         _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-         _window.hidden = NO;
+        _window.hidden = NO;
         _window.windowLevel = _windowLevel;
         _window.rootViewController = _viewController;
     }
@@ -64,16 +64,30 @@
     }
 }
 
-
 - (void)enable {
-    if ( [self.windowDelegate respondsToSelector:@selector(windowEnable:)]) {
-        [self.windowDelegate windowEnable:self];
+    [self enable:NO withCompletion:nil];
+}
+
+- (BOOL)isEnabled {
+    return self.window.alpha == 1.0;
+}
+- (void)enable:(BOOL)animated withCompletion:(void (^)(void))completion {
+    if (![self isEnabled]) {
+        if ( [self.windowDelegate respondsToSelector:@selector(windowEnable:animated:withCompletion:)]) {
+            [self.windowDelegate windowEnable:self animated:animated withCompletion:completion];
+        }
     }
 }
 
 - (void)disable {
-    if ( [self.windowDelegate respondsToSelector:@selector(windowDisable:)]) {
-        [self.windowDelegate windowDisable:self];
+    [self disable:NO withCompletion:nil];
+}
+
+- (void)disable:(BOOL)animated withCompletion:(void (^)(void))completion {
+    if ([self isEnabled]) {
+        if ( [self.windowDelegate respondsToSelector:@selector(windowDisable:animated:withCompletion:)]) {
+            [self.windowDelegate windowDisable:self animated:animated withCompletion:completion];
+        }
     }
 }
 

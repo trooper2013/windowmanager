@@ -51,7 +51,7 @@
  @param window The window that is going to be brought to the front
  */
 - (void)windowManager:(SFSDKWindowManager *_Nonnull)windowManager
-      didSwapWindwow:(SFSDKWindowContainer *_Nonnull)window withWindow:(SFSDKWindowContainer *_Nonnull)window;
+       didSwapWindwow:(SFSDKWindowContainer *_Nonnull)window withWindow:(SFSDKWindowContainer *_Nonnull)window;
 @end
 
 @interface SFSDKWindowManager : NSObject
@@ -94,11 +94,11 @@
 
 /** Swap out one window with another
  */
-- (void)swapWindow:(SFSDKWindowContainer *_Nonnull)currentWindow withWindow:(SFSDKWindowContainer *_Nonnull)newWindow;
+- (void)swapWindow:(SFSDKWindowContainer *)currentWindow withWindow:(SFSDKWindowContainer *)newWindow animated:(BOOL)animated withCompletion:(void (^)(void))completion;
 
 /** Get previously active window
  */
- - (SFSDKWindowContainer *_Nullable)lastActiveWindow;
+- (SFSDKWindowContainer *_Nullable)lastActiveWindow;
 
 /** Add a Window Manager Delegate
  */

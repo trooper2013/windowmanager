@@ -33,7 +33,6 @@
 //#import "SFSecurityLockout.h"
 @interface SFSDKWindowManager()<SFSDKWindowContainerDelegate> {
     SFSDKWindowContainer *_prevActiveWindow;
-    SFSDKWindowContainer *_currentWindow;
 }
 @property (nonatomic, strong) NSHashTable *delegates;
 
@@ -56,14 +55,14 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
         _namedWindows = [NSMapTable mapTableWithKeyOptions:NSMapTableStrongMemory
                                               valueOptions:NSMapTableStrongMemory];
         _delegates = [NSHashTable weakObjectsHashTable];
-
+        
     }
     return self;
-    
 }
 
 - (SFSDKWindowContainer *)mainWindow {
     if (![self.namedWindows objectForKey:kSFMainWindowKey]) {
+        
         [self setMainUIWindow:[UIApplication sharedApplication].delegate.window];
     }
     return [self.namedWindows objectForKey:kSFMainWindowKey];
@@ -74,7 +73,6 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
     container.windowType = SFSDKWindowTypeMain;
     container.windowDelegate = self;
     _prevActiveWindow = container;
-    _currentWindow = container;
     [self.namedWindows setObject:container forKey:kSFMainWindowKey];
 }
 
@@ -161,12 +159,12 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
     }
 }
 #pragma mark - SFSDKWindowContainerDelegate
-- (void)windowEnable:(SFSDKWindowContainer *_Nonnull)window {
-    [self swapWindow:self.lastActiveWindow withWindow:window];
+- (void)windowEnable:(SFSDKWindowContainer *_Nonnull)window animated:(BOOL)animated withCompletion:(void (^)(void))completion{
+    [self swapWindow:self.lastActiveWindow withWindow:window animated:animated withCompletion:completion];
 }
 
-- (void)windowDisable:(SFSDKWindowContainer *)window{
-    [self swapWindow:window withWindow:self.lastActiveWindow];
+- (void)windowDisable:(SFSDKWindowContainer *)window animated:(BOOL)animated withCompletion:(void (^)(void))completion{
+    [self swapWindow:window withWindow:self.lastActiveWindow animated:animated withCompletion:completion];
 }
 
 
@@ -199,7 +197,6 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
     return container;
 }
 
-
 -(UIWindow *)createDefaultUIWindow {
     UIWindow *window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     [window setAlpha:0.0];
@@ -207,33 +204,17 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
     return  window;
 }
 
-- (void)swapWindow:(SFSDKWindowContainer *)currentWindow withWindow:(SFSDKWindowContainer *)newWindow {
+- (void)swapWindow:(SFSDKWindowContainer *)currentWindow withWindow:(SFSDKWindowContainer *)newWindow animated:(BOOL)animated withCompletion:(void (^)(void))completion {
     __weak typeof(self) weakSelf = self;
-    UIViewPropertyAnimator *animator = [[UIViewPropertyAnimator alloc] initWithDuration:0.25 curve:UIViewAnimationCurveEaseInOut animations:^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf enumerateDelegates:^(id<SFWindowManagerDelegate> delegate) {
-            if ([delegate respondsToSelector:@selector(windowManager:willSwapWindwow:withWindow:)]){
-                [delegate windowManager:strongSelf willSwapWindwow:currentWindow withWindow:newWindow];
-            }
+    if (animated) {
+        UIViewPropertyAnimator *animator = [[UIViewPropertyAnimator alloc] initWithDuration:0.25 curve:UIViewAnimationCurveEaseInOut animations:^{
+            __strong typeof(weakSelf) strongSelf = weakSelf;
+            [strongSelf updateWindows:currentWindow newWindow:newWindow animated:animated withCompletion:completion];
         }];
-        
-        currentWindow.window.alpha = 0.0; // make trasparent
-        newWindow.window.alpha = 1.0; //make opague
-        
-        if (![newWindow isSnapshotWindow])
-            strongSelf->_prevActiveWindow = newWindow;
-        else
-            strongSelf->_prevActiveWindow = currentWindow;
-        
-        [self updateKeyWindow];
-        
-        [strongSelf enumerateDelegates:^(id<SFWindowManagerDelegate> delegate) {
-            if ([delegate respondsToSelector:@selector(windowManager:didSwapWindwow:withWindow:)]){
-                [delegate windowManager:strongSelf didSwapWindwow:currentWindow withWindow:newWindow];
-            }
-        }];
-    }];
-    [animator startAnimation];
+        [animator startAnimation];
+    } else {
+        [self updateWindows:currentWindow newWindow:newWindow animated:animated withCompletion:completion];
+    }
 }
 
 - (BOOL)isKeyboard:(UIWindow *) window {
@@ -241,7 +222,23 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
             || [NSStringFromClass([window class])hasPrefix:@"UITextEffectsWindow"]);
 }
 
-- (void)updateKeyWindow {
+- (void)updateWindows:(SFSDKWindowContainer *)currentWindow newWindow:(SFSDKWindowContainer *)newWindow animated:(BOOL)animated withCompletion:(void (^)(void))completion  {
+    
+    [self enumerateDelegates:^(id<SFWindowManagerDelegate> delegate) {
+        if ([delegate respondsToSelector:@selector(windowManager:willSwapWindwow:withWindow:)]){
+            [delegate windowManager:self willSwapWindwow:currentWindow withWindow:newWindow];
+        }
+    }];
+    
+    currentWindow.window.alpha = 0.0; // make trasparent
+    newWindow.window.alpha = 1.0; //make opague
+    
+    if (![newWindow isSnapshotWindow])
+        _prevActiveWindow = newWindow;
+    else
+        _prevActiveWindow = currentWindow;
+    
+    
     for (NSInteger i = [UIApplication sharedApplication].windows.count - 1; i >= 0; i--) {
         UIWindow *win = ([UIApplication sharedApplication].windows)[i];
         if (win.alpha == 0.0 || [self isKeyboard:win])
@@ -249,6 +246,15 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
         [win makeKeyWindow];
         break;
     }
+    
+    [self enumerateDelegates:^(id<SFWindowManagerDelegate> delegate) {
+        if ([delegate respondsToSelector:@selector(windowManager:didSwapWindwow:withWindow:)]){
+            [delegate windowManager:self didSwapWindwow:currentWindow withWindow:newWindow];
+        }
+    }];
+    
+    if (completion)
+        completion();
 }
 
 - (SFSDKWindowContainer *) lastActiveWindow {
