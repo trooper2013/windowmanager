@@ -105,12 +105,11 @@
 - (IBAction)newWindow:(id)sender {
     
     NSString *nextWindowName = [SViewController getNextWindowName:_windowName];
-    SFSDKWindowContainer *currentWindow = [[SFSDKWindowManager sharedManager] windowWithName:_windowName];
     SFSDKWindowContainer *newWindow = [[SFSDKWindowManager sharedManager] createNewNamedWindow:nextWindowName];
     [self reloadData];
     SViewController *nextController = [[SViewController alloc] initWithWindowName:nextWindowName andViewName:@"View-1"];
     newWindow.viewController = nextController;
-    [[SFSDKWindowManager sharedManager] swapWindow:currentWindow withWindow:newWindow];
+    [newWindow enable];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -156,8 +155,7 @@
 - (void)bringToForeground:(NSString *) name {
     NSLog(@"bringToForeground  Called: %@",name );
     SFSDKWindowContainer *window = [[SFSDKWindowManager sharedManager] windowWithName:name];
-    SFSDKWindowContainer *currentWindow = [[SFSDKWindowManager sharedManager] windowWithName:_windowName];
-    [[SFSDKWindowManager sharedManager] swapWindow:currentWindow withWindow:window];
+    [window enable];
     
 }
 

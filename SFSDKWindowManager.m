@@ -31,7 +31,7 @@
 #import "SFSDKRootController.h"
 //#import "SFApplicationHelper.h"
 //#import "SFSecurityLockout.h"
-@interface SFSDKWindowManager() {
+@interface SFSDKWindowManager()<SFSDKWindowContainerDelegate> {
     SFSDKWindowContainer *_prevActiveWindow;
     SFSDKWindowContainer *_currentWindow;
 }
@@ -72,6 +72,7 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
 - (void)setMainUIWindow:(UIWindow *) window {
     SFSDKWindowContainer *container = [[SFSDKWindowContainer alloc] initWithWindow:window name:kSFMainWindowKey level:window.windowLevel];
     container.windowType = SFSDKWindowTypeMain;
+    container.windowDelegate = self;
     _prevActiveWindow = container;
     _currentWindow = container;
     [self.namedWindows setObject:container forKey:kSFMainWindowKey];
@@ -106,6 +107,7 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
     if ( ![self isReservedName:windowName] ) {
         UIWindow *window = [self createDefaultUIWindow];
         container = [[SFSDKWindowContainer alloc] initWithWindow:window name:windowName level:UIWindowLevelNormal];
+        container.windowDelegate = self;
         container.windowType = SFSDKWindowTypeOther;
         [self.namedWindows setObject:container forKey:windowName];
     }
@@ -158,11 +160,21 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
         }];
     }
 }
+#pragma mark - SFSDKWindowContainerDelegate
+- (void)windowEnable:(SFSDKWindowContainer *_Nonnull)window {
+    [self swapWindow:self.lastActiveWindow withWindow:window];
+}
+
+- (void)windowDisable:(SFSDKWindowContainer *)window{
+    [self swapWindow:window withWindow:self.lastActiveWindow];
+}
+
 
 #pragma mark - private methods
 - (SFSDKWindowContainer *)createSnapshotWindow {
     UIWindow *window = [self createDefaultUIWindow];
     SFSDKWindowContainer *container = [[SFSDKWindowContainer alloc] initWithWindow:window name:kSFSnaphotWindowKey level:self.mainWindow.windowLevel + SFWindowLevelSnapshotOffset];
+    container.windowDelegate = self;
     container.windowType = SFSDKWindowTypeSnapshot;
     [self.namedWindows setObject:container forKey:kSFSnaphotWindowKey];
     return container;
@@ -171,6 +183,7 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
 - (SFSDKWindowContainer *)createAuthWindow {
     UIWindow *window = [self createDefaultUIWindow];
     SFSDKWindowContainer *container = [[SFSDKWindowContainer alloc] initWithWindow:window name:kSFLoginWindowKey level:self.mainWindow.windowLevel + SFWindowLevelAuthOffset];
+    container.windowDelegate = self;
     container.windowType = SFSDKWindowTypeAuth;
     [self.namedWindows setObject:container forKey:kSFLoginWindowKey];
     return container;
@@ -180,8 +193,8 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
     UIWindow *window = [self createDefaultUIWindow];
     
     SFSDKWindowContainer *container = [[SFSDKWindowContainer alloc] initWithWindow:window name:kSFPasscodeWindowKey level:self.mainWindow.windowLevel + SFWindowLevelPasscodeOffset];
+    container.windowDelegate = self;
     container.windowType = SFSDKWindowTypePasscode;
-
     [self.namedWindows setObject:container forKey:kSFPasscodeWindowKey];
     return container;
 }
@@ -190,7 +203,7 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
 -(UIWindow *)createDefaultUIWindow {
     UIWindow *window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     [window setAlpha:0.0];
-    window.rootViewController = [[SFSDKRootController alloc] init];
+    //window.rootViewController = [[SFSDKRootController alloc] init];
     return  window;
 }
 
@@ -204,8 +217,8 @@ static NSString *const kSFPasscodeWindowKey = @"passcode";
             }
         }];
         
-        [currentWindow disable];
-        [newWindow enable];
+        currentWindow.window.alpha = 0.0; // make trasparent
+        newWindow.window.alpha = 1.0; //make opague
         
         if (![newWindow isSnapshotWindow])
             strongSelf->_prevActiveWindow = newWindow;

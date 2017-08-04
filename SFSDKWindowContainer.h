@@ -36,6 +36,25 @@ typedef NS_ENUM(NSInteger, SFSDKWindowType) {
     SFSDKWindowTypeSnapshot,
     SFSDKWindowTypeOther
 };
+@class SFSDKWindowContainer;
+
+@protocol SFSDKWindowContainerDelegate<NSObject>
+
+@optional
+
+/**
+ Called when the window is going to be made key & visible
+ @param window The window that is going to be made key & visible
+ */
+- (void)windowEnable:(SFSDKWindowContainer *_Nonnull)window;
+
+/**
+ Called when the window was made key & visible
+ @param window The window that was made key & visible
+ */
+- (void)windowDisable:(SFSDKWindowContainer *_Nonnull)window;
+
+@end
 
 @interface SFSDKWindowContainer : NSObject
 /** Underlying Window that is wrapped by this container
@@ -58,6 +77,9 @@ typedef NS_ENUM(NSInteger, SFSDKWindowType) {
  */
 @property (nonatomic, strong) UIViewController * _Nullable viewController;
 
+/**
+ */
+@property (nonatomic, weak) id <SFSDKWindowContainerDelegate> _Nullable windowDelegate;
 /**
  Create an instance of a Window
  @param window An instance of UIWindow

@@ -64,12 +64,17 @@
     }
 }
 
+
 - (void)enable {
-    [self.window setAlpha:1.0];
+    if ( [self.windowDelegate respondsToSelector:@selector(windowEnable:)]) {
+        [self.windowDelegate windowEnable:self];
+    }
 }
 
 - (void)disable {
-    [self.window setAlpha:0.0];
+    if ( [self.windowDelegate respondsToSelector:@selector(windowDisable:)]) {
+        [self.windowDelegate windowDisable:self];
+    }
 }
 
 - (BOOL)isMainWindow {
